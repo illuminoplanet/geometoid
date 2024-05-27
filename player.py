@@ -1,3 +1,4 @@
+import math
 import pygame
 
 
@@ -9,9 +10,14 @@ class Player:
         self.speed = 5
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+        image = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA)
+        pygame.draw.rect(image, self.color, (0, 0, self.rect.width, self.rect.height))
 
-    def move(self, keys):
+        new_image = pygame.transform.rotate(image, self.angle)
+        new_rect = new_image.get_rect(center=self.rect.center)
+        screen.blit(new_image, new_rect.topleft)
+
+    def move(self, mouse, keys):
         if keys[pygame.K_a]:
             self.rect.x -= self.speed
         if keys[pygame.K_d]:
@@ -20,3 +26,9 @@ class Player:
             self.rect.y -= self.speed
         if keys[pygame.K_s]:
             self.rect.y += self.speed
+
+        dx, dy = (
+            mouse[0] - self.rect.centerx,
+            mouse[1] - self.rect.centery,
+        )
+        self.angle = (180 / math.pi) * -math.atan2(dy, dx)

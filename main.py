@@ -27,8 +27,9 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
+        mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
-        player.move(keys)
+        player.move(mouse, keys)
 
         screen.fill(WHITE)
         player.draw(screen)
