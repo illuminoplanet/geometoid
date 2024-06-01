@@ -1,6 +1,8 @@
 import math
 import pygame
 
+from config import STAGE_PADDING
+
 
 class Player:
     def __init__(self, x, y, size=50):
@@ -37,6 +39,15 @@ class Player:
         if self.velocity.length() > self.max_speed:
             self.velocity.scale_to_length(self.max_speed)
         self.rect.center += self.velocity
+
+        self.rect.clamp_ip(
+            pygame.Rect(
+                STAGE_PADDING,
+                STAGE_PADDING,
+                pygame.display.get_surface().get_width() - STAGE_PADDING * 2,
+                pygame.display.get_surface().get_height() - STAGE_PADDING * 2,
+            )
+        )
 
         dx, dy = (
             mouse[0] - self.rect.centerx,
