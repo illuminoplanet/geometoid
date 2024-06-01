@@ -25,10 +25,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                player.fire = True
+            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                player.fire = False
 
         mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
-        player.move(mouse, keys)
+        player.update(mouse, keys)
 
         screen.fill(WHITE)
         stage.draw(screen)

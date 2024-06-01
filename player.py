@@ -1,6 +1,7 @@
 import math
 import pygame
 
+from projectile import Projectile
 from config import STAGE_PADDING
 
 
@@ -16,6 +17,11 @@ class Player:
         self.acceleration = 0.6
         self.friction = 0.95
 
+        self.cooldown = 100
+        self.prev_fire = 0
+        self.fire = False
+        self.projectiles = []
+
     def draw(self, screen):
         image = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA)
         pygame.draw.rect(image, self.color, (0, 0, self.rect.width, self.rect.height))
@@ -24,7 +30,10 @@ class Player:
         new_rect = new_image.get_rect(center=self.rect.center)
         screen.blit(new_image, new_rect.topleft)
 
-    def move(self, mouse, keys):
+        for proj in self.projectiles:
+            proj.draw(screen)
+
+    def update(self, mouse, keys):
         accel = pygame.math.Vector2(0, 0)
         if keys[pygame.K_a]:
             accel.x -= self.acceleration
@@ -54,3 +63,20 @@ class Player:
             mouse[1] - self.rect.centery,
         )
         self.angle = (180 / math.pi) * -math.atan2(dy, dx)
+
+        current_time = pygame.time.get_ticks()
+        if self.fire and current_time - self.prev_fire > self.cooldown:
+            proj = Projectile(self.rect.center, self.angle)
+            self.projectiles.append(proj)
+            self.prev_fire = current_time
+
+        self.projectiles = list(
+            filter(
+                lambda proj: pygame.display.get_surface()
+                .get_rect()
+                .colliderect(proj.rect),
+                self.projectiles,
+            )
+        )
+        for proj in self.projectiles:
+            proj.update()
