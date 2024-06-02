@@ -1,7 +1,7 @@
 import math
 import pygame
 
-from config import BLACK
+from config import STAGE_PADDING, BLACK
 
 
 class Projectile:
@@ -13,8 +13,14 @@ class Projectile:
             -math.sin(math.radians(angle)) * speed,
         )
 
+        self.destroyed = False
+
     def update(self):
         self.rect.center += self.velocity
+        if self.rect.colliderect(
+            pygame.Rect(0, 0, pygame.display.get_surface().get_width(), STAGE_PADDING)
+        ):
+            self.destroyed = True
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, self.rect)

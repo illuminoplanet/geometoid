@@ -12,6 +12,7 @@ class Player:
 
         self.color = (0, 0, 0)
         self.angle = 0
+        self.health = 100
 
         self.max_speed = 10
         self.velocity = pygame.math.Vector2(0, 0)
@@ -71,13 +72,9 @@ class Player:
             self.projectiles.append(proj)
             self.prev_fire = current_time
 
-        self.projectiles = list(
-            filter(
-                lambda proj: pygame.display.get_surface()
-                .get_rect()
-                .colliderect(proj.rect),
-                self.projectiles,
-            )
-        )
+        self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
         for proj in self.projectiles:
             proj.update()
+
+    def take_damage(self, damage):
+        self.health -= damage

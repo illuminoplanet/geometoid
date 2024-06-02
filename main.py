@@ -1,8 +1,10 @@
-import pygame
 import sys
+import random
+import pygame
 
 from player import Player
 from stage import Stage
+from enemy import Chaser
 from config import *
 
 pygame.init()
@@ -33,6 +35,7 @@ def main():
         mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
         player.update(mouse, keys)
+        stage.update(player)
 
         screen.fill(WHITE)
         stage.draw(screen)
