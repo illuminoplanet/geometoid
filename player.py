@@ -7,8 +7,13 @@ from config import STAGE_PADDING
 
 
 class Player:
-    def __init__(self, x, y, size=50):
-        self.rect = pygame.Rect(x, y, size, size)
+    def __init__(self, x, y):
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/player.png"), (64, 64)
+        )
+        self.proj_image = pygame.image.load("assets/proj_player.png")
+
+        self.rect = self.image.get_rect(center=(x, y))
 
         self.color = (0, 0, 0)
         self.angle = 0
@@ -25,15 +30,12 @@ class Player:
         self.projectiles = []
 
     def draw(self, screen):
-        image = pygame.Surface((self.rect.width, self.rect.height), pygame.SRCALPHA)
-        pygame.draw.rect(image, self.color, (0, 0, self.rect.width, self.rect.height))
-
-        new_image = pygame.transform.rotate(image, self.angle)
-        new_rect = new_image.get_rect(center=self.rect.center)
-        screen.blit(new_image, new_rect.topleft)
-
         for proj in self.projectiles:
             proj.draw(screen)
+
+        new_image = pygame.transform.rotate(self.image, self.angle)
+        new_rect = new_image.get_rect(center=self.rect.center)
+        screen.blit(new_image, new_rect.topleft)
 
     def update(self, mouse, keys):
         accel = pygame.math.Vector2(0, 0)
@@ -65,12 +67,13 @@ class Player:
             mouse[1] - self.rect.centery,
         )
         self.angle = (180 / math.pi) * -math.atan2(dy, dx)
-
         current_time = pygame.time.get_ticks()
         if self.fire and current_time - self.prev_fire > self.cooldown:
-            proj = Projectile(
-                self, self.rect.center, self.angle + random.randint(-5, 5)
+            center = self.rect.center + pygame.Vector2(
+                math.cos(math.radians(self.angle)) * 32,
+                -math.sin(math.radians(self.angle)) * 32,
             )
+            proj = Projectile(self, center, self.angle + random.randint(-5, 5))
             self.projectiles.append(proj)
             self.prev_fire = current_time
 

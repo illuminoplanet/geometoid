@@ -16,6 +16,7 @@ class Enemy:
         self.health = health
 
         self.rect = pygame.Rect(x, y, 20, 20)
+        self.proj_image = pygame.image.load("assets/proj_player.png")
 
     @abstractmethod
     def update(self):
