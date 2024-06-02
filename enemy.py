@@ -5,7 +5,7 @@ import random
 import pygame
 
 from projectile import Projectile
-from config import BLACK
+from config import STAGE_PADDING, BLACK
 
 
 class Enemy:
@@ -16,7 +16,6 @@ class Enemy:
         self.health = health
 
         self.rect = pygame.Rect(x, y, 20, 20)
-        self.direction = pygame.Vector2(0, 0)
 
     @abstractmethod
     def update(self):
@@ -89,6 +88,50 @@ class Shooter(Enemy):
             self.speed = 0
         else:
             self.speed = 2
+
+        self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
+        for proj in self.projectiles:
+            proj.update()
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
+        for proj in self.projectiles:
+            proj.draw(screen)
+
+
+class Spreader(Enemy):
+    def __init__(self, x, y):
+        super().__init__(x, y, speed=1, health=5)
+        self.color = BLACK
+        self.radius = 15
+        self.cooldown = 1000
+        self.prev_fire = 0
+        self.projectiles = []
+
+        self.direction = pygame.Vector2(random.choice([-1, 1]), random.choice([-1, 1]))
+
+    def update(self, player_pos):
+        self.x += self.direction.x * self.speed
+        self.y += self.direction.y * self.speed
+        if (
+            self.x < STAGE_PADDING + self.radius
+            or self.x
+            > pygame.display.get_surface().get_width() - STAGE_PADDING - self.radius
+        ):
+            self.direction.x *= -1
+        if (
+            self.y < STAGE_PADDING + self.radius
+            or self.y
+            > pygame.display.get_surface().get_height() - STAGE_PADDING - self.radius
+        ):
+            self.direction.y *= -1
+
+        current_time = pygame.time.get_ticks()
+        if current_time - self.prev_fire > self.cooldown:
+            for angle in range(0, 360, 45):
+                proj = Projectile(self, (self.x, self.y), angle, speed=5)
+                self.projectiles.append(proj)
+            self.prev_fire = current_time
 
         self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
         for proj in self.projectiles:
