@@ -68,7 +68,9 @@ class Player:
 
         current_time = pygame.time.get_ticks()
         if self.fire and current_time - self.prev_fire > self.cooldown:
-            proj = Projectile(self.rect.center, self.angle + random.randint(-5, 5))
+            proj = Projectile(
+                self, self.rect.center, self.angle + random.randint(-5, 5)
+            )
             self.projectiles.append(proj)
             self.prev_fire = current_time
 

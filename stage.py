@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from enemy import Chaser
+from enemy import Chaser, Shooter
 from config import *
 
 
@@ -9,7 +9,7 @@ class Stage:
     def __init__(self, padding):
         self.padding = padding
         self.enemies = [
-            Chaser(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
+            Shooter(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
             for _ in range(1)
         ]
 

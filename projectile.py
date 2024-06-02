@@ -5,7 +5,8 @@ from config import STAGE_PADDING, BLACK
 
 
 class Projectile:
-    def __init__(self, pos, angle, speed=15):
+    def __init__(self, owner, pos, angle, speed=15):
+        self.owner = owner
         self.rect = pygame.Rect(pos[0], pos[1], 6, 6)
         self.color = BLACK
         self.velocity = pygame.math.Vector2(
