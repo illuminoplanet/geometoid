@@ -14,6 +14,8 @@ screen = pygame.display.set_mode(
     (SCREEN_WIDTH, SCREEN_HEIGHT),
 )
 pygame.display.set_caption("Geometoid")
+pygame.font.init()
+font = pygame.font.SysFont("Arial", 30)
 
 clock = pygame.time.Clock()
 
@@ -31,6 +33,8 @@ def main():
                 player.fire = True
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 player.fire = False
+            if event.type == pygame.USEREVENT:
+                stage.plan_round()
 
         mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
@@ -38,7 +42,7 @@ def main():
         stage.update(player)
 
         screen.fill(WHITE)
-        stage.draw(screen)
+        stage.draw(screen, font)
         player.draw(screen)
 
         pygame.display.flip()
