@@ -16,7 +16,7 @@ class Enemy:
         self.health = health
 
         self.rect = pygame.Rect(x, y, 20, 20)
-        self.proj_image = pygame.image.load("assets/proj_player.png")
+        self.proj_image = pygame.image.load("assets/proj_enemy.png")
 
     @abstractmethod
     def update(self):
@@ -96,41 +96,66 @@ class Chaser(Enemy):
 class Shooter(Enemy):
     def __init__(self, x, y):
         super().__init__(x, y, speed=2, health=5)
-        self.color = BLACK
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/shooter.png"), (48, 48)
+        )
+        self.rect = self.image.get_rect(center=(x, y))
+
+        self.max_speed = 1.5
+        self.velocity = pygame.math.Vector2(0, 0)
+        self.acceleration = 0.2
+        self.friction = 0.95
+
         self.radius = 15
-        self.cooldown = 200
+        self.cooldown = 50
         self.prev_fire = 0
         self.projectiles = []
 
+        self.move_stop = None
+
     def update(self, player_pos):
-        direction_vector = pygame.Vector2(player_pos) - pygame.Vector2(self.x, self.y)
-        distance = direction_vector.length()
-        if direction_vector.length() > 0:
-            direction_vector = direction_vector.normalize()
-        self.rect.topleft = (self.x, self.y)
+        self.direction = pygame.Vector2(player_pos) - pygame.Vector2(self.x, self.y)
+        distance = self.direction.length()
+        if self.direction.length() > 0:
+            self.direction = self.direction.normalize()
 
-        self.x += direction_vector.x * self.speed
-        self.y += direction_vector.y * self.speed
+        self.velocity = (
+            self.velocity * self.friction + self.direction * self.acceleration
+        )
+        if self.velocity.length() > self.max_speed:
+            self.velocity.scale_to_length(self.max_speed)
 
-        if distance < 320:
+        self.x += self.velocity.x
+        self.y += self.velocity.y
+
+        if distance < 240:
+            if self.move_stop is None:
+                self.move_stop = pygame.time.get_ticks()
             current_time = pygame.time.get_ticks()
-            if current_time - self.prev_fire > self.cooldown:
-                angle = -math.degrees(
-                    math.atan2(direction_vector.y, direction_vector.x)
-                ) + random.randint(-5, 5)
-                proj = Projectile(self, (self.x, self.y), angle, speed=5)
-                self.projectiles.append(proj)
-                self.prev_fire = current_time
-            self.speed = 0
+            if current_time - self.move_stop > 500:
+                if current_time - self.prev_fire > self.cooldown:
+                    angle = -math.degrees(
+                        math.atan2(self.direction.y, self.direction.x)
+                    ) + random.randint(-20, 20)
+                    proj = Projectile(self, (self.x, self.y), angle, speed=5)
+                    self.projectiles.append(proj)
+                    self.prev_fire = current_time
+            self.acceleration = 0
         else:
-            self.speed = 2
+            self.move_stop = None
+            self.acceleration = 0.2
 
         self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
         for proj in self.projectiles:
             proj.update()
 
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
+        new_image = pygame.transform.rotate(
+            self.image,
+            -math.degrees(math.atan2(self.direction.y, self.direction.x)),
+        )
+        new_rect = new_image.get_rect(center=(self.x, self.y))
+        screen.blit(new_image, new_rect.topleft)
         for proj in self.projectiles:
             proj.draw(screen)
 
@@ -138,9 +163,13 @@ class Shooter(Enemy):
 class Spreader(Enemy):
     def __init__(self, x, y):
         super().__init__(x, y, speed=1, health=5)
-        self.color = BLACK
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/spreader.png"), (64, 64)
+        )
+        self.rect = self.image.get_rect(center=(x, y))
+
         self.radius = 15
-        self.cooldown = 1000
+        self.cooldown = 500
         self.prev_fire = 0
         self.projectiles = []
 
@@ -164,8 +193,13 @@ class Spreader(Enemy):
 
         current_time = pygame.time.get_ticks()
         if current_time - self.prev_fire > self.cooldown:
-            for angle in range(0, 360, 45):
-                proj = Projectile(self, (self.x, self.y), angle, speed=5)
+            for angle in range(0, 360, 90):
+                proj = Projectile(
+                    self,
+                    (self.x, self.y),
+                    angle - pygame.time.get_ticks() // 10,
+                    speed=5,
+                )
                 self.projectiles.append(proj)
             self.prev_fire = current_time
 
@@ -174,6 +208,12 @@ class Spreader(Enemy):
             proj.update()
 
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
         for proj in self.projectiles:
             proj.draw(screen)
+
+        new_image = pygame.transform.rotate(
+            self.image,
+            pygame.time.get_ticks() // 10,
+        )
+        new_rect = new_image.get_rect(center=(self.x, self.y))
+        screen.blit(new_image, new_rect.topleft)

@@ -9,7 +9,7 @@ class Stage:
     def __init__(self, padding):
         self.padding = padding
         self.enemies = [
-            Chaser(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
+            Spreader(random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
             for _ in range(1)
         ]
 
