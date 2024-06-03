@@ -21,11 +21,11 @@ class Enemy:
         self.rect = pygame.Rect(x, y, 20, 20)
         self.proj_image = pygame.image.load("assets/proj_enemy.png")
 
-    @abstractmethod
-    def update(self):
-        raise NotImplementedError
+        self.create_time = None
 
-    @abstractmethod
+    def update(self):
+        pass
+
     def draw(self, screen):
         raise NotImplementedError
 
@@ -41,6 +41,9 @@ class Enemy:
     def check_collision(self, other):
         distance = math.hypot(self.x - other.rect.x, self.y - other.rect.y)
         return distance < self.radius
+
+    def hatch(self):
+        pass
 
 
 class Chaser(Enemy):
@@ -61,7 +64,13 @@ class Chaser(Enemy):
         self.prev_trail = 0
         self.radius = 14
 
+        self.color = (255, 153, 85)
+
     def update(self, player_pos):
+        super().update()
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            return
+
         self.direction = pygame.Vector2(player_pos) - pygame.Vector2(self.x, self.y)
         if self.direction.length() > 0:
             self.direction = self.direction.normalize()
@@ -82,6 +91,15 @@ class Chaser(Enemy):
             self.prev_trail = pygame.time.get_ticks()
 
     def draw(self, screen):
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            pygame.draw.circle(
+                screen,
+                self.color,
+                (int(self.x), int(self.y)),
+                int(30 * (pygame.time.get_ticks() - self.create_time) / 1000),
+            )
+            return
+
         new_image = pygame.transform.rotate(
             self.image,
             -math.degrees(math.atan2(self.direction.y, self.direction.x)),
@@ -119,8 +137,14 @@ class Shooter(Enemy):
         self.projectiles = []
 
         self.move_stop = None
+        self.color = (255, 128, 128)
 
     def update(self, player_pos):
+        super().update()
+
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            return
+
         self.direction = pygame.Vector2(player_pos) - pygame.Vector2(self.x, self.y)
         distance = self.direction.length()
         if self.direction.length() > 0:
@@ -157,6 +181,15 @@ class Shooter(Enemy):
             proj.update()
 
     def draw(self, screen):
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            pygame.draw.circle(
+                screen,
+                self.color,
+                (int(self.x), int(self.y)),
+                int(30 * (pygame.time.get_ticks() - self.create_time) / 1000),
+            )
+            return
+
         new_image = pygame.transform.rotate(
             self.image,
             -math.degrees(math.atan2(self.direction.y, self.direction.x)),
@@ -181,8 +214,12 @@ class Spreader(Enemy):
         self.projectiles = []
 
         self.direction = pygame.Vector2(random.choice([-1, 1]), random.choice([-1, 1]))
+        self.color = (246, 241, 147)
 
     def update(self, player_pos):
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            return
+
         self.x += self.direction.x * self.speed
         self.y += self.direction.y * self.speed
         if (
@@ -215,6 +252,15 @@ class Spreader(Enemy):
             proj.update()
 
     def draw(self, screen):
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            pygame.draw.circle(
+                screen,
+                self.color,
+                (int(self.x), int(self.y)),
+                int(30 * (pygame.time.get_ticks() - self.create_time) / 1000),
+            )
+            return
+
         for proj in self.projectiles:
             proj.draw(screen)
 

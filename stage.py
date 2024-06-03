@@ -71,3 +71,5 @@ class Stage:
 
     def spawn_enemies(self):
         self.enemies.append(self.pending_enemies.pop(0))
+        for enemy in self.enemies:
+            enemy.create_time = pygame.time.get_ticks()
