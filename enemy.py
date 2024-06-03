@@ -15,6 +15,9 @@ class Enemy:
         self.speed = speed
         self.health = health
 
+        self.projectiles = []
+        self.radius = 15
+
         self.rect = pygame.Rect(x, y, 20, 20)
         self.proj_image = pygame.image.load("assets/proj_enemy.png")
 
@@ -26,8 +29,8 @@ class Enemy:
     def draw(self, screen):
         raise NotImplementedError
 
-    def take_damage(self, amount):
-        self.health -= amount
+    def take_damage(self, damage):
+        self.health -= damage
         if self.health <= 0:
             self.destroy()
 
@@ -35,8 +38,9 @@ class Enemy:
         print("Enemy destroyed")
         pass
 
-    def check_collision(self, other_rect):
-        return self.rect.colliderect(other_rect)
+    def check_collision(self, other):
+        distance = math.hypot(self.x - other.rect.x, self.y - other.rect.y)
+        return distance < self.radius
 
 
 class Chaser(Enemy):
@@ -48,12 +52,14 @@ class Chaser(Enemy):
         self.rect = self.image.get_rect(center=(x, y))
 
         self.max_speed = 7
+        self.direction = pygame.Vector2(0, 0)
         self.velocity = pygame.math.Vector2(0, 0)
         self.acceleration = 0.7
         self.friction = 0.95
 
         self.trail = []
         self.prev_trail = 0
+        self.radius = 14
 
     def update(self, player_pos):
         self.direction = pygame.Vector2(player_pos) - pygame.Vector2(self.x, self.y)
@@ -101,12 +107,13 @@ class Shooter(Enemy):
         )
         self.rect = self.image.get_rect(center=(x, y))
 
+        self.direction = pygame.Vector2(0, 0)
         self.max_speed = 1.5
         self.velocity = pygame.math.Vector2(0, 0)
         self.acceleration = 0.2
         self.friction = 0.95
 
-        self.radius = 15
+        self.radius = 24
         self.cooldown = 50
         self.prev_fire = 0
         self.projectiles = []
@@ -168,7 +175,7 @@ class Spreader(Enemy):
         )
         self.rect = self.image.get_rect(center=(x, y))
 
-        self.radius = 15
+        self.radius = 32
         self.cooldown = 500
         self.prev_fire = 0
         self.projectiles = []
