@@ -35,11 +35,12 @@ class Enemy:
             self.destroy()
 
     def destroy(self):
-        print("Enemy destroyed")
         pass
 
     def check_collision(self, other):
-        distance = math.hypot(self.x - other.rect.x, self.y - other.rect.y)
+        self_x, self_y = self.x, self.y
+        other_x, other_y = other.rect.center
+        distance = math.hypot(self_x - other_x, self_y - other_y)
         return distance < self.radius
 
     def hatch(self):
@@ -62,7 +63,7 @@ class Chaser(Enemy):
 
         self.trail = []
         self.prev_trail = 0
-        self.radius = 14
+        self.radius = 40
 
         self.color = (255, 153, 85)
 

@@ -37,6 +37,7 @@ class Stage:
             enemy.update(player.rect.center)
             if enemy.check_collision(player):
                 player.take_damage(1)
+                enemy.take_damage(100)
             for proj in player.projectiles:
                 if enemy.check_collision(proj):
                     enemy.take_damage(1)
