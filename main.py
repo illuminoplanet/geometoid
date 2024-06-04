@@ -43,7 +43,7 @@ def main():
 
         screen.fill(WHITE)
         stage.draw(screen, font)
-        player.draw(screen)
+        player.draw(screen, font)
 
         pygame.display.flip()
         clock.tick(FPS)

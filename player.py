@@ -3,7 +3,7 @@ import random
 import pygame
 
 from projectile import Projectile
-from config import STAGE_PADDING
+from config import STAGE_PADDING, BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 class Player:
@@ -17,7 +17,7 @@ class Player:
 
         self.color = (0, 0, 0)
         self.angle = 0
-        self.health = 100
+        self.health = 20
 
         self.max_speed = 10
         self.velocity = pygame.math.Vector2(0, 0)
@@ -29,7 +29,14 @@ class Player:
         self.fire = False
         self.projectiles = []
 
-    def draw(self, screen):
+    def draw(self, screen, font):
+        if self.health <= 0:
+            text = font.render("Game Over", True, self.color)
+            screen.blit(
+                text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2)
+            )
+            return
+
         for proj in self.projectiles:
             proj.draw(screen)
 
@@ -37,7 +44,13 @@ class Player:
         new_rect = new_image.get_rect(center=self.rect.center)
         screen.blit(new_image, new_rect.topleft)
 
+        text = font.render(f"Health: {self.health}", True, self.color)
+        screen.blit(text, (STAGE_PADDING, STAGE_PADDING))
+
     def update(self, mouse, keys):
+        if self.health <= 0:
+            return
+
         accel = pygame.math.Vector2(0, 0)
         if keys[pygame.K_a]:
             accel.x -= self.acceleration
@@ -52,6 +65,9 @@ class Player:
         if self.velocity.length() > self.max_speed:
             self.velocity.scale_to_length(self.max_speed)
         self.rect.center += self.velocity
+
+        self.x = self.rect.centerx
+        self.y = self.rect.centery
 
         self.rect.clamp_ip(
             pygame.Rect(
