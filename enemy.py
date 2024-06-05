@@ -65,7 +65,6 @@ class Chaser(Enemy):
         self.color = (255, 153, 85)
 
     def update(self, player_pos):
-        super().update()
         if pygame.time.get_ticks() - self.create_time < 1000:
             return
 
@@ -138,8 +137,6 @@ class Shooter(Enemy):
         self.color = (255, 128, 128)
 
     def update(self, player_pos):
-        super().update()
-
         if pygame.time.get_ticks() - self.create_time < 1000:
             return
 
