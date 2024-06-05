@@ -1,10 +1,8 @@
 import sys
-import random
 import pygame
 
 from player import Player
 from stage import Stage
-from enemy import Chaser
 from config import *
 
 pygame.init()

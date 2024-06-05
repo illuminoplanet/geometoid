@@ -24,7 +24,7 @@ class Enemy:
         self.create_time = None
 
     def update(self):
-        pass
+        raise NotImplementedError
 
     def draw(self, screen):
         raise NotImplementedError
@@ -42,9 +42,6 @@ class Enemy:
         other_x, other_y = other.rect.center
         distance = math.hypot(self_x - other_x, self_y - other_y)
         return distance < self.radius
-
-    def hatch(self):
-        pass
 
 
 class Chaser(Enemy):
