@@ -8,15 +8,18 @@ from config import *
 class Stage:
     def __init__(self, padding, screen):
         self.padding = padding
+########################## PHASE 2 #########################
         self.screen = screen
+############################################################
 
         self.round = 0
         self.pending_enemies = []
         self.enemies = []
 
         self.rest = False
-
+########################## PHASE 2 #########################
         self.damage_effect_timer = 0
+############################################################
 
     def draw(self, screen, font):
         pygame.draw.rect(screen, BLACK, (0, 0, SCREEN_WIDTH, self.padding))
@@ -35,18 +38,22 @@ class Stage:
             text = font.render(f"Round {self.round}", True, BLACK)
             screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, 50))
 
+########################## PHASE 2 #########################
     def damage_effect(self, scale):
         if(self.damage_effect_timer > 0):
             GB = min(255, max(0, round(255 * (1-scale))))
             self.screen.fill((255, GB, GB), special_flags = pygame.BLEND_MULT)
             self.damage_effect_timer -= 1
+############################################################
 
     def update(self, player):
         for enemy in self.enemies:
             enemy.update(player.rect.center)
             if enemy.check_collision(player):
                 player.take_damage(1)
+########################## PHASE 2 #########################
                 self.damage_effect_timer = 10
+############################################################
                 enemy.take_damage(100)
             for proj in player.projectiles:
                 if enemy.check_collision(proj):
@@ -55,7 +62,9 @@ class Stage:
             for proj in enemy.projectiles:
                 if player.rect.colliderect(proj.rect):
                     player.take_damage(1)
+########################## PHASE 2 #########################
                     self.damage_effect_timer = 10
+############################################################
                     proj.destroyed = True
 
         self.enemies = list(filter(lambda enemy: enemy.health > 0, self.enemies))
@@ -69,7 +78,9 @@ class Stage:
                 else:
                     self.spawn_enemies()
 
+########################## PHASE 2 #########################
         self.damage_effect(0.5)
+############################################################
 
     def plan_round(self):
         num_waves = self.round // 3 + 1

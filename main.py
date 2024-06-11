@@ -19,7 +19,9 @@ clock = pygame.time.Clock()
 
 
 def main():
+    ########################## PHASE 2 #########################
     stage = Stage(STAGE_PADDING, screen)
+    ############################################################
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
     running = True
