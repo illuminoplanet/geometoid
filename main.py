@@ -19,7 +19,7 @@ clock = pygame.time.Clock()
 
 
 def main():
-    stage = Stage(STAGE_PADDING)
+    stage = Stage(STAGE_PADDING, screen)
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
     running = True
@@ -36,12 +36,13 @@ def main():
 
         mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
-        player.update(mouse, keys)
-        stage.update(player)
 
         screen.fill(WHITE)
         stage.draw(screen, font)
         player.draw(screen, font)
+
+        player.update(mouse, keys)
+        stage.update(player)
 
         pygame.display.flip()
         clock.tick(FPS)

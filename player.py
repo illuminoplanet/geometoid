@@ -99,3 +99,4 @@ class Player:
 
     def take_damage(self, damage):
         self.health -= damage
+
