@@ -28,12 +28,19 @@ class Player:
         self.prev_fire = 0
         self.fire = False
         self.projectiles = []
+        self.score = 0
 
     def draw(self, screen, font):
         if self.health <= 0:
-            text = font.render("Game Over", True, self.color)
+            game_over_text = font.render("Game Over", True, self.color)
+            score_text = font.render(f"Score = {self.score}", True, self.color)
             screen.blit(
-                text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2)
+                game_over_text, 
+                (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, SCREEN_HEIGHT // 2 - 20)
+            )
+            screen.blit(
+                score_text, 
+                (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + 20)
             )
             return
 
@@ -44,8 +51,10 @@ class Player:
         new_rect = new_image.get_rect(center=self.rect.center)
         screen.blit(new_image, new_rect.topleft)
 
-        text = font.render(f"Health: {self.health}", True, self.color)
-        screen.blit(text, (STAGE_PADDING, STAGE_PADDING))
+        text1 = font.render(f"Health: {self.health}", True, self.color)
+        text2 = font.render(f"Score: {self.score}", True, self.color)
+        screen.blit(text1, (STAGE_PADDING, STAGE_PADDING))
+        screen.blit(text2, (STAGE_PADDING, STAGE_PADDING + 30))
 
     def update(self, mouse, keys):
         if self.health <= 0:
