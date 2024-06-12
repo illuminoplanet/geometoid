@@ -99,7 +99,15 @@ class Player:
                 -math.sin(math.radians(self.angle)) * 32,
             )
             proj = Projectile(self, center, self.angle + random.randint(-5, 5))
-            self.projectiles.append(proj)
+            self.projectiles.append(proj)      
+
+            # 스페이스 바를 누르고 있을 때 추가 총알 발사
+            if keys[pygame.K_SPACE]:
+                angles = [-6, 6]
+                for angle_offset in angles:
+                    extra_proj = Projectile(self, center, self.angle + angle_offset)
+                    self.projectiles.append(extra_proj)
+
             self.prev_fire = current_time
 
         self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
