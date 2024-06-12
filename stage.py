@@ -43,6 +43,7 @@ class Stage:
                     enemy.take_damage(1)
                     proj.destroyed = True
                     if enemy.health <= 0:
+                        player.fuel = min(player.fuel + 20, player.max_fuel)  # 연료 충전
                         player.score += 1
             for proj in enemy.projectiles:
                 if player.rect.colliderect(proj.rect):
