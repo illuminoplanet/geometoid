@@ -23,6 +23,7 @@ def main():
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
     running = True
+    ########## PHASE2 ##########
     paused = False
 
     while running:
@@ -35,6 +36,9 @@ def main():
                 player.fire = False
             if event.type == pygame.USEREVENT:
                 stage.plan_round()
+            ############################
+            ########## PHASE2 ##########
+            ############################
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     paused = not paused
@@ -56,6 +60,9 @@ def main():
             screen.blit(pause_text, (SCREEN_WIDTH // 2 - pause_text.get_width() // 2, SCREEN_HEIGHT // 2))
             pygame.display.flip()
             clock.tick(10)
+        ############################
+        ########## PHASE2 ##########
+        ############################
 
     pygame.quit()
     sys.exit()

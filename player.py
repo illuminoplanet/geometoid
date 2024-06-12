@@ -28,15 +28,25 @@ class Player:
         self.prev_fire = 0
         self.fire = False
         self.projectiles = []
+        ########## PHASE2 ##########
         self.score = 0
 
+        ############################
+        ########## PHASE2 ##########
+        ############################
         self.max_fuel = 100
         self.fuel = 100
         self.fuel_depletion_rate = 5  # 연료 소모
         self.fuel_recharge_rate = 2  # 연료 재충전
+        ############################
+        ########## PHASE2 ##########
+        ############################
 
     def draw(self, screen, font):
         if self.health <= 0:
+            ############################
+            ########## PHASE2 ##########
+            ############################
             game_over_text = font.render("Game Over", True, self.color)
             score_text = font.render(f"Score = {self.score}", True, self.color)
             screen.blit(
@@ -47,6 +57,9 @@ class Player:
                 score_text, 
                 (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + 20)
             )
+            ############################
+            ########## PHASE2 ##########
+            ############################
             return
 
         for proj in self.projectiles:
@@ -56,11 +69,21 @@ class Player:
         new_rect = new_image.get_rect(center=self.rect.center)
         screen.blit(new_image, new_rect.topleft)
 
+        ############################
+        ########## PHASE2 ##########
+        ############################
         text1 = font.render(f"Health: {self.health}", True, self.color)
         text2 = font.render(f"Score: {self.score}", True, self.color)
         screen.blit(text1, (STAGE_PADDING, STAGE_PADDING))
         screen.blit(text2, (STAGE_PADDING, STAGE_PADDING + 30))
+        ############################
+        ########## PHASE2 ##########
+        ############################
 
+
+        ############################
+        ########## PHASE2 ##########
+        ############################
         # 연료 게이지 표시
         fuel_ratio = self.fuel / self.max_fuel
         fuel_bar_width = 200
@@ -69,7 +92,9 @@ class Player:
         fuel_bar_y = SCREEN_HEIGHT - STAGE_PADDING - fuel_bar_height - 10
         pygame.draw.rect(screen, (0, 0, 0), (fuel_bar_x, fuel_bar_y, fuel_bar_width, fuel_bar_height), 2)  # 검정색 테두리
         pygame.draw.rect(screen, (0, 255, 0), (fuel_bar_x, fuel_bar_y, fuel_bar_width * fuel_ratio, fuel_bar_height))  # 초록색 연료 게이지
-
+        ############################
+        ########## PHASE2 ##########
+        ############################
 
     def update(self, mouse, keys):
         if self.health <= 0:
@@ -116,6 +141,9 @@ class Player:
             proj = Projectile(self, center, self.angle + random.randint(-5, 5))
             self.projectiles.append(proj)      
 
+            ############################
+            ########## PHASE2 ##########
+            ############################
             # 스페이스 바를 누르고 있을 때 추가 총알 발사
             if keys[pygame.K_SPACE] and self.fuel > 0:
                 angles = [-6, 6]  # 3갈래 발사 각도
@@ -123,6 +151,9 @@ class Player:
                     extra_proj = Projectile(self, center, self.angle + angle_offset)
                     self.projectiles.append(extra_proj)
                 self.fuel -= self.fuel_depletion_rate  # 연료 소모
+            ############################
+            ########## PHASE2 ##########
+            ############################
 
             self.prev_fire = current_time
 
