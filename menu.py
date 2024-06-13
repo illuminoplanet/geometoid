@@ -10,6 +10,8 @@ class Menu:
         self.selected_option = 0
         self.font = pygame.font.SysFont("Arial", 30)
         self.frame = 0
+        self.smallfont = pygame.font.SysFont("Arial", 20)
+        self.largefont = pygame.font.SysFont("Arial", 60)
     def draw(self, clock):
         self.screen.fill(WHITE)
         for i, option in enumerate(self.options):
@@ -23,8 +25,14 @@ class Menu:
             else:
                 color = BLACK
             text = self.font.render(option, True, color)
-            text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 60))
+            text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 60 ))
             self.screen.blit(text, text_rect)
+        instruction = self.smallfont.render("Press W, A, S, D to move, and press Enter.", True, (100,100,100))
+        instruction_rect = instruction.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200))
+        self.screen.blit(instruction, instruction_rect)
+        title = self.largefont.render("Geometoid", True, BLACK)
+        title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, 200))
+        self.screen.blit(title, title_rect)
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
