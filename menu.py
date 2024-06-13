@@ -9,13 +9,19 @@ class Menu:
         self.options = ["Start Game", "Quit"]
         self.selected_option = 0
         self.font = pygame.font.SysFont("Arial", 30)
-    def draw(self):
+        self.frame = 0
+    def draw(self, clock):
         self.screen.fill(WHITE)
         for i, option in enumerate(self.options):
             if i == self.selected_option:
-                color = BLACK
+                if self.frame > 30:
+                    color = (100,100,100)
+                else: 
+                    color = BLACK
+                self.frame += 1
+                self.frame = self.frame%60
             else:
-                color = (100, 100, 100)
+                color = BLACK
             text = self.font.render(option, True, color)
             text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 60))
             self.screen.blit(text, text_rect)

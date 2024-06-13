@@ -24,13 +24,12 @@ def main():
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
     menu = Menu(screen)
 
-    running = False
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if running == True:
+            if player.alive == True:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     player.fire = True
                 if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
@@ -40,9 +39,11 @@ def main():
             else:
                 action = menu.handle_event(event)
                 if action == "start_game":
-                    running = True
+                    stage = Stage(STAGE_PADDING, screen)
+                    player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+                    player.alive = True
                 
-        if running == True:
+        if player.alive == True:
             mouse = pygame.mouse.get_pos()
             keys = pygame.key.get_pressed()
 
@@ -54,7 +55,8 @@ def main():
             stage.draw(screen, font)
             player.draw(screen, font)
 
-        else: menu.draw()
+        else: 
+            menu.draw(clock)
 
         pygame.display.flip()
         clock.tick(FPS)

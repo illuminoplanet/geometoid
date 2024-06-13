@@ -29,6 +29,8 @@ class Player:
         self.fire = False
         self.projectiles = []
 
+        self.alive = False
+
     def draw(self, screen, font):
         if self.health <= 0:
             text = font.render("Game Over", True, self.color)
@@ -49,6 +51,7 @@ class Player:
 
     def update(self, mouse, keys):
         if self.health <= 0:
+            self.alive = False
             return
 
         accel = pygame.math.Vector2(0, 0)
