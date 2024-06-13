@@ -21,9 +21,10 @@ clock = pygame.time.Clock()
 
 def main():
     ########################## PHASE 2 #########################
-    stage = Stage(STAGE_PADDING, screen)
-    ############################################################
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+    stage = Stage(STAGE_PADDING, screen, player)
+    ############################################################
+    
     menu = Menu(screen)
 
     while True:
@@ -39,11 +40,13 @@ def main():
                 if event.type == pygame.USEREVENT:
                     stage.plan_round()
 ######################## PHASE 2 #############################
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                    stage.invincible_timer = 200
             else:
                 action = menu.handle_event(event)
                 if action == "start_game":
-                    stage = Stage(STAGE_PADDING, screen)
                     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+                    stage = Stage(STAGE_PADDING, screen, player)
                     player.alive = True
 ##############################################################
                 
@@ -55,7 +58,6 @@ def main():
 
             player.update(mouse, keys)
             stage.update(player)
-            
             stage.draw(screen, font)
             player.draw(screen, font)
 

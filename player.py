@@ -8,9 +8,10 @@ from config import STAGE_PADDING, BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Player:
     def __init__(self, x, y):
-        self.image = pygame.transform.scale(
-            pygame.image.load("assets/player.png"), (64, 64)
+        self.image_original = pygame.transform.scale(
+            pygame.image.load("assets/player.png").convert_alpha(), (64, 64)
         )
+        self.image = self.image_original.copy()
         self.proj_image = pygame.image.load("assets/proj_player.png")
 
         self.rect = self.image.get_rect(center=(x, y))

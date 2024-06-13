@@ -3,13 +3,14 @@ import pygame
 
 from enemy import Chaser, Shooter, Spreader
 from config import *
-
+from player import Player
 
 class Stage:
-    def __init__(self, padding, screen):
+    def __init__(self, padding, screen, player):
         self.padding = padding
 ########################## PHASE 2 #########################
         self.screen = screen
+        self.player = player
 ############################################################
 
         self.round = 0
@@ -19,6 +20,31 @@ class Stage:
         self.rest = False
 ########################## PHASE 2 #########################
         self.damage_effect_timer = 0
+        self.damage = 1
+        self.invincible_timer = 0
+        self.player_image = self.player.image
+        self.playercolor = 0
+
+    def invincible(self):
+        if self.invincible_timer == 0: 
+            self.damage == 1
+            self.player.image = self.player.image_original.copy()
+            return False
+        self.damage = 0
+        
+        color = pygame.Color(0)
+        color.hsla = (self.playercolor, 100, 50, 100)
+        self.playercolor = self.playercolor + 2 if self.playercolor < 360 else 0 
+
+        rainbow_player = pygame.Surface(self.player_image.get_size()).convert_alpha()
+        rainbow_player.fill(color)
+        self.player.image = self.player.image_original.copy()
+        self.player.image.blit(rainbow_player, (0,0), special_flags = pygame.BLEND_RGBA_MULT)
+        
+        
+        self.invincible_timer -= 1
+        return True
+
 ############################################################
 
     def draw(self, screen, font):
@@ -50,7 +76,7 @@ class Stage:
         for enemy in self.enemies:
             enemy.update(player.rect.center)
             if enemy.check_collision(player):
-                player.take_damage(1)
+                player.take_damage(self.damage)
 ########################## PHASE 2 #########################
                 self.damage_effect_timer = 10
 ############################################################
@@ -61,7 +87,7 @@ class Stage:
                     proj.destroyed = True
             for proj in enemy.projectiles:
                 if player.rect.colliderect(proj.rect):
-                    player.take_damage(1)
+                    player.take_damage(self.damage)
 ########################## PHASE 2 #########################
                     self.damage_effect_timer = 10
 ############################################################
@@ -79,7 +105,8 @@ class Stage:
                     self.spawn_enemies()
 
 ########################## PHASE 2 #########################
-        self.damage_effect(0.5)
+        if not self.invincible():
+            self.damage_effect(0.5)
 ############################################################
 
     def plan_round(self):
