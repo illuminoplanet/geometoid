@@ -36,12 +36,14 @@ def main():
                     player.fire = False
                 if event.type == pygame.USEREVENT:
                     stage.plan_round()
+######################## PHASE 2 #############################
             else:
                 action = menu.handle_event(event)
                 if action == "start_game":
                     stage = Stage(STAGE_PADDING, screen)
                     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
                     player.alive = True
+##############################################################
                 
         if player.alive == True:
             mouse = pygame.mouse.get_pos()

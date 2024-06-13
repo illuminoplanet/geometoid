@@ -1,3 +1,5 @@
+####################### PHASE 2 #############################
+
 import sys
 import pygame
 from config import *
@@ -11,7 +13,7 @@ class Menu:
         self.font = pygame.font.SysFont("Arial", 30)
         self.frame = 0
         self.smallfont = pygame.font.SysFont("Arial", 20)
-        self.largefont = pygame.font.SysFont("Arial", 60)
+        self.largefont = pygame.font.SysFont("Arial", 60, True)
     def draw(self, clock):
         self.screen.fill(WHITE)
         for i, option in enumerate(self.options):
@@ -47,3 +49,4 @@ class Menu:
                     pygame.quit()
                     sys.exit()
         return None
+###################################################################
