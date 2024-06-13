@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from enemy import Chaser, Shooter, Spreader
+from enemy import Chaser, Shooter, Spreader, Boss
 from config import *
 
 
@@ -65,18 +65,27 @@ class Stage:
     def plan_round(self):
         num_waves = self.round // 3 + 1
         for _ in range(num_waves):
-            num_enemies = self.round // 2 + 1
-            wave = []
-            for _ in range(num_enemies):
-                enemy_type = random.choice([Chaser, Shooter, Spreader])
-                if random.random() < 0.5:
-                    x = random.randint(64, SCREEN_WIDTH - 64)
-                    y = random.choice([64, SCREEN_HEIGHT - 64])
-                else:
-                    x = random.choice([64, SCREEN_WIDTH - 64])
-                    y = random.randint(64, SCREEN_HEIGHT - 64)
+            ############################
+            ########## PHASE2 ##########
+            ############################
+            if self.round % 5 == 0:  # 5라운드마다 보스 등장
+                wave = [Boss(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)]
+            else:
+                num_enemies = self.round // 2 + 1
+                wave = []
+                for _ in range(num_enemies):
+                    enemy_type = random.choice([Chaser, Shooter, Spreader])
+                    if random.random() < 0.5:
+                        x = random.randint(64, SCREEN_WIDTH - 64)
+                        y = random.choice([64, SCREEN_HEIGHT - 64])
+                    else:
+                        x = random.choice([64, SCREEN_WIDTH - 64])
+                        y = random.randint(64, SCREEN_HEIGHT - 64)
 
-                wave.append(enemy_type(x, y))
+                    wave.append(enemy_type(x, y))
+            ############################
+            ########## PHASE2 ##########
+            ############################
             self.pending_enemies.append(wave)
 
         self.rest = False
