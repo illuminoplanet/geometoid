@@ -23,6 +23,9 @@ def main():
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
     running = True
+    ########## PHASE2 ##########
+    paused = False
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -33,18 +36,33 @@ def main():
                 player.fire = False
             if event.type == pygame.USEREVENT:
                 stage.plan_round()
+            ############################
+            ########## PHASE2 ##########
+            ############################
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = not paused
 
-        mouse = pygame.mouse.get_pos()
-        keys = pygame.key.get_pressed()
-        player.update(mouse, keys)
-        stage.update(player)
+        if not paused:
+            mouse = pygame.mouse.get_pos()
+            keys = pygame.key.get_pressed()
+            player.update(mouse, keys)
+            stage.update(player)
 
-        screen.fill(WHITE)
-        stage.draw(screen, font)
-        player.draw(screen, font)
+            screen.fill(WHITE)
+            stage.draw(screen, font)
+            player.draw(screen, font)
 
-        pygame.display.flip()
-        clock.tick(FPS)
+            pygame.display.flip()
+            clock.tick(FPS)
+        else:
+            pause_text = font.render("Paused", True, BLACK)
+            screen.blit(pause_text, (SCREEN_WIDTH // 2 - pause_text.get_width() // 2, SCREEN_HEIGHT // 2))
+            pygame.display.flip()
+            clock.tick(10)
+        ############################
+        ########## PHASE2 ##########
+        ############################
 
     pygame.quit()
     sys.exit()

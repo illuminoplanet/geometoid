@@ -265,3 +265,73 @@ class Spreader(Enemy):
         )
         new_rect = new_image.get_rect(center=(self.x, self.y))
         screen.blit(new_image, new_rect.topleft)
+
+############################
+########## PHASE2 ##########
+############################
+class Boss(Enemy):
+    def __init__(self, x, y):
+        super().__init__(x, y, speed=2, health=15)
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/boss.png"), (128, 128)
+        )
+        self.rect = self.image.get_rect(center=(x, y))
+
+        self.radius = 64
+        self.cooldown = 560
+        self.prev_fire = 0
+        self.projectiles = []
+
+        self.direction = pygame.Vector2(0, 0)
+        self.color = (255, 0, 0)
+
+    def update(self, player_pos):
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            return
+
+        # 보스 이동 패턴
+        self.direction = pygame.Vector2(player_pos) - pygame.Vector2(self.x, self.y)
+        if self.direction.length() > 0:
+            self.direction = self.direction.normalize()
+        self.x += self.direction.x * self.speed
+        self.y += self.direction.y * self.speed
+
+        current_time = pygame.time.get_ticks()
+        if current_time - self.prev_fire > self.cooldown:
+            # 360도 원형으로 탄환 발사
+            for angle in range(0, 360, 30):
+                proj = Projectile(
+                    self,
+                    (self.x, self.y),
+                    angle,
+                    speed=7,
+                )
+                self.projectiles.append(proj)
+            self.prev_fire = current_time
+
+        self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
+        for proj in self.projectiles:
+            proj.update()
+
+    def draw(self, screen):
+        if pygame.time.get_ticks() - self.create_time < 1000:
+            pygame.draw.circle(
+                screen,
+                self.color,
+                (int(self.x), int(self.y)),
+                int(60 * (pygame.time.get_ticks() - self.create_time) / 1000),
+            )
+            return
+
+        for proj in self.projectiles:
+            proj.draw(screen)
+
+        new_image = pygame.transform.rotate(
+            self.image,
+            pygame.time.get_ticks() // 20,
+        )
+        new_rect = new_image.get_rect(center=(self.x, self.y))
+        screen.blit(new_image, new_rect.topleft)
+############################
+########## PHASE2 ##########
+############################
