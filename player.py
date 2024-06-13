@@ -100,3 +100,6 @@ class Player:
     def take_damage(self, damage):
         self.health -= damage
 
+    def damage_effect(surface, scale):
+        GB = min(255, max(0, round(255 * (1-scale))))
+        surface.fill((255, GB, GB), special_flags = pygame.BLEND_MULT)

@@ -33,7 +33,7 @@ class Stage:
 
         if self.rest:
             text = font.render(f"Round {self.round}", True, BLACK)
-            screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, 50))
+            screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, 50) )
 
     def damage_effect(self, scale):
         if(self.damage_effect_timer > 0):
