@@ -29,6 +29,8 @@ class Player:
         self.fire = False
         self.projectiles = []
 
+        self.alive = False
+
     def draw(self, screen, font):
         if self.health <= 0:
             text = font.render("Game Over", True, self.color)
@@ -49,6 +51,7 @@ class Player:
 
     def update(self, mouse, keys):
         if self.health <= 0:
+            self.alive = False
             return
 
         accel = pygame.math.Vector2(0, 0)
@@ -100,3 +103,6 @@ class Player:
     def take_damage(self, damage):
         self.health -= damage
 
+    def damage_effect(surface, scale):
+        GB = min(255, max(0, round(255 * (1-scale))))
+        surface.fill((255, GB, GB), special_flags = pygame.BLEND_MULT)
