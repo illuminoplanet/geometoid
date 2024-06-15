@@ -24,7 +24,7 @@ class Player:
         self.acceleration = 0.6
         self.friction = 0.95
 
-        self.cooldown = 100
+        self.cooldown = 300
         self.prev_fire = 0
         self.fire = False
         self.projectiles = []
