@@ -1,6 +1,7 @@
 import random
 import pygame
 
+from item import Health, Shot_Speed, Bomb
 from enemy import Chaser, Shooter, Spreader
 from config import *
 
@@ -12,6 +13,15 @@ class Stage:
         self.round = 0
         self.pending_enemies = []
         self.enemies = []
+        ############################
+        ########## phase2 ##########
+        ############################
+
+        self.items = []
+
+        ############################
+        ########## phase2 ##########
+        ############################
 
         self.rest = False
 
@@ -27,6 +37,17 @@ class Stage:
 
         for enemy in self.enemies:
             enemy.draw(screen)
+
+        ############################
+        ########## phase2 ##########
+        ############################
+
+        for item in self.items:
+            item.draw(screen)
+
+        ############################
+        ########## phase2 ##########
+        ############################
 
         if self.rest:
             text = font.render(f"Round {self.round}", True, BLACK)
@@ -47,6 +68,33 @@ class Stage:
                     player.take_damage(1)
                     proj.destroyed = True
 
+        ############################
+        ########## phase2 ##########
+        ############################
+        for item in self.items:
+            item.update()
+            if item.check_collision(player):
+                if isinstance(item, Health):
+                    player.health = min(player.health + 5, 20)
+                elif isinstance(item, Shot_Speed):
+                    player.cooldown -= 10
+                elif isinstance(item, Bomb):
+                    for enemy in self.enemies:
+                        enemy.take_damage(100)
+                item.used = True
+        
+        self.items = list(filter(lambda item: not item.used, self.items))
+        # random item generation when enemy is killed
+        tmp = list(filter(lambda enemy: enemy.health <= 0, self.enemies))
+        if len(tmp) > 0:
+            if random.random() < 0.5:
+                enemy = random.choice(tmp)
+                item_type = random.choice([Health, Shot_Speed, Bomb])
+                self.items.append(item_type(enemy.x, enemy.y))
+
+        ############################
+        ########## phase2 ##########
+        ############################
         self.enemies = list(filter(lambda enemy: enemy.health > 0, self.enemies))
 
         if len(self.enemies) == 0:

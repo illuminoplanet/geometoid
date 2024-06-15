@@ -5,12 +5,15 @@ import math
 import pygame
 
 class Item:
-    def __init__(self, x, y):
+    def __init__(self, x, y, item_type):
         self.x = x
         self.y = y
+        self.item_type = item_type
+        self.used = False
 
+        self.radius = 15
         self.rect = pygame.Rect(x, y, 15, 15)
-        self.proj_image = pygame.image.load("assets/proj_enemy.png")
+        self.proj_image = pygame.image.load("assets/heart.png")
 
     def update(self):
         raise NotImplementedError
@@ -27,45 +30,63 @@ class Item:
 
 class Health(Item):
     def __init__(self, x, y):
-        super().__init__(x, y)
+        super().__init__(x, y, "health")
         self.image = pygame.transform.scale(
-            pygame.image.load("assets/heart.png"), (20, 20)
+            pygame.image.load("assets/heart.png"), (40, 40)
         )
+        self.radius = 40
         self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
         pass
 
     def draw(self, screen):
-        pass
+        new_image = pygame.transform.rotate(
+            self.image,
+            pygame.time.get_ticks() // 10,
+        )
+        new_rect = new_image.get_rect(center=(self.x, self.y))
+        screen.blit(new_image, new_rect.topleft)
 
-class Damage(Item):
+class Shot_Speed(Item):
     def __init__(self, x, y):
-        super().__init__(x, y)
+        super().__init__(x, y, "shot speed")
         self.image = pygame.transform.scale(
-            pygame.image.load("assets/bullet.png"), (15, 20)
+            pygame.image.load("assets/bullet.png"), (30, 40)
         )
+        self.radius = 40
         self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
         pass
 
     def draw(self, screen):
-        pass
+        new_image = pygame.transform.rotate(
+            self.image,
+            pygame.time.get_ticks() // 10,
+        )
+        new_rect = new_image.get_rect(center=(self.x, self.y))
+        screen.blit(new_image, new_rect.topleft)
 
 class Bomb(Item):
     def __init__(self, x, y):
-        super().__init__(x, y)
+        super().__init__(x, y, "bomb")
         self.image = pygame.transform.scale(
-            pygame.image.load("assets/bomb.png"), (20, 20)
+            pygame.image.load("assets/bomb.png"), (40, 40)
         )
+        self.radius = 40
         self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
         pass
 
     def draw(self, screen):
-        pass
+        new_image = pygame.transform.rotate(
+            self.image,
+            pygame.time.get_ticks() // 10,
+        )
+        new_rect = new_image.get_rect(center=(self.x, self.y))
+        screen.blit(new_image, new_rect.topleft)
 
 ############################
 ########## phase2 ##########
