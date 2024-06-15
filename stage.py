@@ -90,10 +90,10 @@ class Stage:
                 enemy = random.choice(tmp)
                 item_type = random.choice([Health, Shot_Speed, Bomb])
                 self.items.append(item_type(enemy.x, enemy.y))
-
         ############################
         ########## phase2 ##########
         ############################
+        
         self.enemies = list(filter(lambda enemy: enemy.health > 0, self.enemies))
 
         if len(self.enemies) == 0:

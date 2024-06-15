@@ -31,10 +31,6 @@ class Player:
 
     def draw(self, screen, font):
         if self.health <= 0:
-            text = font.render("Game Over", True, self.color)
-            screen.blit(
-                text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2)
-            )
             return
 
         for proj in self.projectiles:
