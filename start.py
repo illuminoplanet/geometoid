@@ -1,3 +1,7 @@
+############################
+########## phase2 ##########
+############################
+
 import pygame
 
 from config import *
@@ -35,3 +39,7 @@ class Start:
                     if event.key == pygame.K_ESCAPE:
                         return False
                     return True
+
+############################
+########## phase2 ##########
+############################
