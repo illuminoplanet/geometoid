@@ -5,18 +5,14 @@ import math
 import pygame
 
 class Item:
-    def __init__(self, x, y, item_type):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.item_type = item_type
         self.used = False
 
         self.radius = 15
         self.rect = pygame.Rect(x, y, 15, 15)
         self.proj_image = pygame.image.load("assets/heart.png")
-
-    def update(self):
-        raise NotImplementedError
     
     def draw(self, screen):
         raise NotImplementedError
@@ -30,15 +26,12 @@ class Item:
 
 class Health(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "health")
+        super().__init__(x, y)
         self.image = pygame.transform.scale(
             pygame.image.load("assets/heart.png"), (40, 40)
         )
         self.radius = 40
         self.rect = self.image.get_rect(center=(x, y))
-
-    def update(self):
-        pass
 
     def draw(self, screen):
         new_image = pygame.transform.rotate(
@@ -50,15 +43,12 @@ class Health(Item):
 
 class Shot_Speed(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "shot speed")
+        super().__init__(x, y)
         self.image = pygame.transform.scale(
             pygame.image.load("assets/bullet.png"), (30, 40)
         )
         self.radius = 40
         self.rect = self.image.get_rect(center=(x, y))
-
-    def update(self):
-        pass
 
     def draw(self, screen):
         new_image = pygame.transform.rotate(
@@ -70,7 +60,7 @@ class Shot_Speed(Item):
 
 class Bomb(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "bomb")
+        super().__init__(x, y)
         self.image = pygame.transform.scale(
             pygame.image.load("assets/bomb.png"), (40, 40)
         )

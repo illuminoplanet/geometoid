@@ -72,7 +72,6 @@ class Stage:
         ########## phase2 ##########
         ############################
         for item in self.items:
-            item.update()
             if item.check_collision(player):
                 if isinstance(item, Health):
                     player.health = min(player.health + 5, 20)
