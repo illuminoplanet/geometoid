@@ -79,7 +79,7 @@ class Stage:
                     player.cooldown = min(player.cooldown-10, 100)
                 elif isinstance(item, Bomb):
                     for enemy in self.enemies:
-                        enemy.take_damage(100)
+                        enemy.take_damage(10)
                 item.used = True
         
         self.items = list(filter(lambda item: not item.used, self.items))
