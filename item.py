@@ -27,8 +27,11 @@ class Item:
 
 class Health(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "health")
-        pass
+        super().__init__(x, y)
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/heart.png"), (20, 20)
+        )
+        self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
         pass
@@ -38,8 +41,11 @@ class Health(Item):
 
 class Damage(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "damage")
-        pass
+        super().__init__(x, y)
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/bullet.png"), (15, 20)
+        )
+        self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
         pass
@@ -49,8 +55,11 @@ class Damage(Item):
 
 class Bomb(Item):
     def __init__(self, x, y):
-        super().__init__(x, y, "bomb")
-        pass
+        super().__init__(x, y)
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/bomb.png"), (20, 20)
+        )
+        self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
         pass
