@@ -76,7 +76,7 @@ class Stage:
                 if isinstance(item, Health):
                     player.health = min(player.health + 5, 20)
                 elif isinstance(item, Shot_Speed):
-                    player.cooldown = min(player.cooldown-10, 100)
+                    player.cooldown = max(player.cooldown-10, 100)
                 elif isinstance(item, Bomb):
                     for enemy in self.enemies:
                         enemy.take_damage(10)
