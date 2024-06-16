@@ -11,9 +11,10 @@ from config import STAGE_PADDING, BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 DARKGRAY = (59, 59, 59)
 SHELL = (175, 156, 96)
 
-def draw_gauge_bar(screen, width, height, percentage, bullets, reload):
+def draw_gauge_bar(screen, width, height, bullets, max_bullets, reload):
+    percentage = bullets / max_bullets
     if not reload:
-        text = pygame.font.SysFont("Arial", 20).render(f"Bullets: {bullets}", True, BLACK)
+        text = pygame.font.SysFont("Arial", 20).render(f"{bullets} / {max_bullets}", True, BLACK)
         screen.blit(text, (SCREEN_WIDTH - width - text.get_width() - 10, 3))
     else:
         text = pygame.font.SysFont("Arial", 20).render("Reloading...", True, BLACK)
@@ -74,7 +75,7 @@ class Player:
         text = font.render(f"Health: {self.health}", True, self.color)
         screen.blit(text, (STAGE_PADDING, STAGE_PADDING))
         
-        draw_gauge_bar(screen, 200, 20, self.bullets / self.max_bullets, self.bullets, self.reload)
+        draw_gauge_bar(screen, 200, 20, self.bullets, self.max_bullets, self.reload)
 
     def update(self, mouse, keys):
         if self.health <= 0:
