@@ -1,6 +1,7 @@
 import sys
 import pygame
 
+from start import Start
 from player import Player
 from stage import Stage
 from config import *
@@ -22,7 +23,17 @@ def main():
     stage = Stage(STAGE_PADDING)
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
-    running = True
+    ############################
+    ########## phase2 ##########
+    ############################
+    start = Start(STAGE_PADDING)
+    pause = False
+
+    screen.fill(WHITE)
+    running = start.draw(screen)
+    ############################
+    ########## phase2 ##########
+    ############################
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -34,14 +45,61 @@ def main():
             if event.type == pygame.USEREVENT:
                 stage.plan_round()
 
+            ############################
+            ########## phase2 ##########
+            ############################
+            if event.type == pygame.KEYUP and event.key == pygame.K_r:
+                if player.bullets < player.max_bullets:
+                    player.reload = not player.reload
+            if event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
+                pause = not pause
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+            ############################
+            ########## phase2 ##########
+            ############################
+
         mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
-        player.update(mouse, keys)
-        stage.update(player)
 
-        screen.fill(WHITE)
-        stage.draw(screen, font)
-        player.draw(screen, font)
+        ############################
+        ########## phase2 ##########
+        ############################
+        if not pause:
+            player.update(mouse, keys)
+            if player.health <= 0:
+                running = False
+                text = font.render("Game Over", True, BLACK)
+                screen.blit(
+                    text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2)
+                )
+                text = font.render("Press any key to exit..", True, BLACK)
+                screen.blit(
+                    text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 + 100)
+                )
+                pygame.display.flip()
+                over = False
+                while not over:
+                    for event in pygame.event.get():
+                        if event.type == pygame.KEYUP:
+                            over = True
+                break
+                
+            stage.update(player)
+
+            screen.fill(WHITE)
+            stage.draw(screen, font)
+            player.draw(screen, font)
+        else:
+            screen.fill(WHITE)
+            text = font.render("Paused", True, BLACK)
+            screen.blit(
+                text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2)
+            )
+        ############################
+        ########## phase2 ##########
+        ############################
 
         pygame.display.flip()
         clock.tick(FPS)

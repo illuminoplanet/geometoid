@@ -116,7 +116,7 @@ class Chaser(Enemy):
 
 class Shooter(Enemy):
     def __init__(self, x, y):
-        super().__init__(x, y, speed=2, health=5)
+        super().__init__(x, y, speed=2, health=10)
         self.image = pygame.transform.scale(
             pygame.image.load("assets/shooter.png"), (48, 48)
         )
@@ -197,7 +197,7 @@ class Shooter(Enemy):
 
 class Spreader(Enemy):
     def __init__(self, x, y):
-        super().__init__(x, y, speed=1, health=5)
+        super().__init__(x, y, speed=1, health=8)
         self.image = pygame.transform.scale(
             pygame.image.load("assets/spreader.png"), (64, 64)
         )
