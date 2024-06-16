@@ -23,7 +23,7 @@ class Start:
         text = pygame.font.SysFont("Arial", 50).render("Welcome to Geometoid!", True, BLACK)
         screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, 100))
 
-        text = pygame.font.SysFont("Arial", 25).render("WASD - Move / MOUSELEFT - Shot / ESC - Exit / SPACE - Pause", True, BLACK)
+        text = pygame.font.SysFont("Arial", 25).render("WASD - Move / MOUSELEFT - Shot / ESC - Exit / SPACE - Pause / R - Reload", True, BLACK)
         screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT - text.get_height()))
 
         text = pygame.font.SysFont("Arial", 25).render("Press any key to start..", True, BLACK)
