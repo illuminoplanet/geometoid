@@ -48,6 +48,9 @@ def main():
             ############################
             ########## phase2 ##########
             ############################
+            if event.type == pygame.KEYUP and event.key == pygame.K_r:
+                if player.bullets < player.max_bullets:
+                    player.reload = not player.reload
             if event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
                 pause = not pause
             if event.type == pygame.KEYUP:
@@ -70,6 +73,10 @@ def main():
                 text = font.render("Game Over", True, BLACK)
                 screen.blit(
                     text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2)
+                )
+                text = font.render("Press any key to exit..", True, BLACK)
+                screen.blit(
+                    text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 + 100)
                 )
                 pygame.display.flip()
                 over = False

@@ -76,7 +76,7 @@ class Stage:
                 if isinstance(item, Health):
                     player.health = min(player.health + 5, 20)
                 elif isinstance(item, Shot_Speed):
-                    player.cooldown = max(player.cooldown-10, 100)
+                    player.cooldown = max(player.cooldown-20, 100)
                 elif isinstance(item, Bomb):
                     for enemy in self.enemies:
                         enemy.take_damage(10)
@@ -86,7 +86,7 @@ class Stage:
         # random item generation when enemy is killed
         tmp = list(filter(lambda enemy: enemy.health <= 0, self.enemies))
         if len(tmp) > 0:
-            if random.random() < 0.5:
+            if random.random() < 0.4:
                 enemy = random.choice(tmp)
                 item_type = random.choice([Health, Shot_Speed, Bomb])
                 self.items.append(item_type(enemy.x, enemy.y))
