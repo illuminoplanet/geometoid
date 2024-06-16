@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from item import Health, Shot_Speed, Bomb
+from item import Health, Shot_Speed, Magazine, Bomb
 from enemy import Chaser, Shooter, Spreader
 from config import *
 
@@ -77,6 +77,11 @@ class Stage:
                     player.health = min(player.health + 5, 20)
                 elif isinstance(item, Shot_Speed):
                     player.cooldown = max(player.cooldown-20, 100)
+                elif isinstance(item, Magazine):
+                    player.max_bullets += 5
+                    player.bullets = player.max_bullets
+                    player.reload = False
+                    player.reload_time = max(player.reload_time-15, 250)
                 elif isinstance(item, Bomb):
                     for enemy in self.enemies:
                         enemy.take_damage(10)
@@ -88,7 +93,7 @@ class Stage:
         if len(tmp) > 0:
             if random.random() < 0.4:
                 enemy = random.choice(tmp)
-                item_type = random.choice([Health, Shot_Speed, Bomb])
+                item_type = random.choice([Health, Shot_Speed, Magazine, Bomb])
                 self.items.append(item_type(enemy.x, enemy.y))
         ############################
         ########## phase2 ##########

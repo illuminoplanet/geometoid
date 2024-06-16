@@ -58,6 +58,23 @@ class Shot_Speed(Item):
         new_rect = new_image.get_rect(center=(self.x, self.y))
         screen.blit(new_image, new_rect.topleft)
 
+class Magazine(Item):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.image = pygame.transform.scale(
+            pygame.image.load("assets/magazine.png"), (30, 40)
+        )
+        self.radius = 40
+        self.rect = self.image.get_rect(center=(x, y))
+
+    def draw(self, screen):
+        new_image = pygame.transform.rotate(
+            self.image,
+            pygame.time.get_ticks() // 10,
+        )
+        new_rect = new_image.get_rect(center=(self.x, self.y))
+        screen.blit(new_image, new_rect.topleft)
+
 class Bomb(Item):
     def __init__(self, x, y):
         super().__init__(x, y)
