@@ -1,8 +1,9 @@
 # https://github.com/Seowonryeol/geometoid - 단순 슈팅 게임.
 
 # 1. 30초 채워서 필살기 가동 - 사방팔방으로 다 발사하기
-# 2. 각 오브젝트 위에 체력 표시 및 내 체력 표시 # 
+# 2. 각 오브젝트 위에 체력 표시 및 내 체력 표시 #완료
 # 3. 보스 스테이지
+# 4. 효과음 추가
 
 import sys
 import pygame

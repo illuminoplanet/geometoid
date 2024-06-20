@@ -5,6 +5,11 @@ import pygame
 from projectile import Projectile
 from config import STAGE_PADDING, BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 
+########################### function 4 ##############################
+pygame.mixer.init()
+normal_laser_sound=pygame.mixer.Sound("assets/laser_sound1.mp3")
+########################### function 4 ##############################
+
 
 class Player:
     def __init__(self, x, y):
@@ -49,6 +54,8 @@ class Player:
         text = font.render(f"Health: {self.health}", True, self.color)
         screen.blit(text, (STAGE_PADDING, STAGE_PADDING))
 
+
+        #function2 
         #체력 바 표시    
         bar_width = 65
         bar_height = 15
@@ -113,6 +120,11 @@ class Player:
             )
             proj = Projectile(self, center, self.angle + random.randint(-5, 5))
             self.projectiles.append(proj)
+
+########################### function 4 ##############################
+            normal_laser_sound.play()
+########################### function 4 ##############################
+
             self.prev_fire = current_time
 
         self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
