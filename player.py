@@ -28,6 +28,8 @@ class Player:
         self.prev_fire = 0
         self.fire = False
         self.projectiles = []
+        self.max_health=self.health
+        
 
     def draw(self, screen, font):
         if self.health <= 0:
@@ -46,6 +48,26 @@ class Player:
 
         text = font.render(f"Health: {self.health}", True, self.color)
         screen.blit(text, (STAGE_PADDING, STAGE_PADDING))
+
+        #체력 바 표시    
+        bar_width = 65
+        bar_height = 15
+        bar_x = self.x - bar_width // 2
+        bar_y = self.y - self.image.get_height()//2 - bar_height - 13
+
+        # 현재 체력 비율 계산
+        health_ratio = self.health / self.max_health
+
+        # 배경 체력바
+        pygame.draw.rect(screen, (255, 0, 0), (bar_x, bar_y, bar_width, bar_height))
+
+        # 현재 체력 표시
+        pygame.draw.rect(
+            screen,
+            (0, 255, 0),
+            (bar_x, bar_y, bar_width * health_ratio, bar_height),
+        )
+
 
     def update(self, mouse, keys):
         if self.health <= 0:
@@ -96,6 +118,9 @@ class Player:
         self.projectiles = [proj for proj in self.projectiles if not proj.destroyed]
         for proj in self.projectiles:
             proj.update()
+
+        
+
 
     def take_damage(self, damage):
         self.health -= damage
