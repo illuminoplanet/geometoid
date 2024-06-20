@@ -64,6 +64,9 @@ class Chaser(Enemy):
 
         self.color = (255, 153, 85)
 
+        self.max_health = 5
+        self.current_health = self.health
+
     def update(self, player_pos):
         if pygame.time.get_ticks() - self.create_time < 1000:
             return
@@ -112,6 +115,23 @@ class Chaser(Enemy):
             new_image.set_alpha(i * (150 // len(self.trail)))
             new_rect = new_image.get_rect(center=(x, y))
             screen.blit(new_image, new_rect.topleft)
+            bar_width = 40
+            bar_height = 5
+            bar_x = self.rect.centerx - bar_width // 2
+            bar_y = self.rect.top - bar_height - 5
+
+            # 현재 체력 비율 계산
+            health_ratio = self.current_health / self.max_health
+
+            # 배경 체력바
+            pygame.draw.rect(screen, (255, 0, 0), (bar_x, bar_y, bar_width, bar_height))
+
+            # 현재 체력 표시
+            pygame.draw.rect(
+                screen,
+                (0, 255, 0),
+                (bar_x, bar_y, bar_width * health_ratio, bar_height),
+            )
 
 
 class Shooter(Enemy):
