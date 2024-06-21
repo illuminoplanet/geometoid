@@ -24,26 +24,32 @@ class Stage:
         self.invincible_timer = 0
         self.player_image = self.player.image
         self.playercolor = 0
+        self.ATK = 100
+        self.isInvincible = False
 
     def invincible(self):
-        if self.invincible_timer == 0: 
-            self.damage == 1
+        if self.invincible_timer <= 0: 
+            self.damage = 1
             self.player.image = self.player.image_original.copy()
-            return False
-        self.damage = 0
-        
-        color = pygame.Color(0)
-        color.hsla = (self.playercolor, 100, 50, 100)
-        self.playercolor = self.playercolor + 2 if self.playercolor < 360 else 0 
+            self.ATK = 100
+            self.isInvincible = False
 
-        rainbow_player = pygame.Surface(self.player_image.get_size()).convert_alpha()
-        rainbow_player.fill(color)
-        self.player.image = self.player.image_original.copy()
-        self.player.image.blit(rainbow_player, (0,0), special_flags = pygame.BLEND_RGBA_MULT)
-        
-        
-        self.invincible_timer -= 1
-        return True
+        else:
+            self.damage = 0
+            self.ATK = 1000
+            
+            color = pygame.Color(0)
+            color.hsla = (self.playercolor, 100, 50, 100)
+            self.playercolor = self.playercolor + 2 if self.playercolor < 360 else 0 
+
+            rainbow_player = pygame.Surface(self.player_image.get_size()).convert_alpha()
+            rainbow_player.fill(color)
+            self.player.image = self.player.image_original.copy()
+            self.player.image.blit(rainbow_player, (0,0), special_flags = pygame.BLEND_RGBA_MULT)
+            
+            
+            self.invincible_timer -= 1
+            self.isInvincible = True
 
 ############################################################
 
@@ -73,14 +79,18 @@ class Stage:
 ############################################################
 
     def update(self, player):
+        self.invincible()
+        if not self.isInvincible:
+            self.damage_effect(0.5)
+
         for enemy in self.enemies:
             enemy.update(player.rect.center)
             if enemy.check_collision(player):
                 player.take_damage(self.damage)
 ########################## PHASE 2 #########################
-                self.damage_effect_timer = 10
+                if not self.isInvincible: self.damage_effect_timer = 10
 ############################################################
-                enemy.take_damage(100)
+                enemy.take_damage(self.ATK)
             for proj in player.projectiles:
                 if enemy.check_collision(proj):
                     enemy.take_damage(1)
@@ -89,7 +99,7 @@ class Stage:
                 if player.rect.colliderect(proj.rect):
                     player.take_damage(self.damage)
 ########################## PHASE 2 #########################
-                    self.damage_effect_timer = 10
+                    if not self.isInvincible: self.damage_effect_timer = 10
 ############################################################
                     proj.destroyed = True
 
@@ -105,8 +115,7 @@ class Stage:
                     self.spawn_enemies()
 
 ########################## PHASE 2 #########################
-        if not self.invincible():
-            self.damage_effect(0.5)
+
 ############################################################
 
     def plan_round(self):
