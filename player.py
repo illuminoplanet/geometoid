@@ -35,6 +35,9 @@ class Player:
         self.projectiles = []
         self.max_health=self.health
         
+        ##################### function 1 #########################
+        self.last_ultimate_time = pygame.time.get_ticks()
+        ##################### function 1 #########################
 
     def draw(self, screen, font):
         if self.health <= 0:
@@ -90,6 +93,11 @@ class Player:
         if keys[pygame.K_s]:
             accel.y += self.acceleration
 
+        ######################## function 2 ##############################
+        if keys[pygame.K_r] and pygame.time.get_ticks-self.last_ultimate_time >=20000 : 
+            self.activate_ultimate()
+        ######################## function 2 ##############################
+
         self.velocity = (self.velocity + accel) * self.friction
         if self.velocity.length() > self.max_speed:
             self.velocity.scale_to_length(self.max_speed)
@@ -131,8 +139,16 @@ class Player:
         for proj in self.projectiles:
             proj.update()
 
-        
-
-
     def take_damage(self, damage):
         self.health -= damage
+
+########################### function 4 ##############################
+    def activate_ultimae(self):
+        for i in range(30):
+            center = self.rect.center + pygame.Vector2(
+                math.cos(math.radians(self.angle)) * 32,
+                -math.sin(math.radians(self.angle)) * 32,
+            )
+            proj = Projectile(self, self.center, random.randint(0, 359))
+            self.projectiles.append(proj)
+########################### function 4 ##############################

@@ -32,6 +32,12 @@ class Stage:
             text = font.render(f"Round {self.round}", True, BLACK)
             screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, 50))
 
+        ######################### function 2 ###############################
+
+        if 
+
+        ######################### function 2 ###############################
+
     def update(self, player):
         for enemy in self.enemies:
             enemy.update(player.rect.center)
