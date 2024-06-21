@@ -24,6 +24,9 @@ class Stage:
         pygame.draw.rect(
             screen, BLACK, (SCREEN_WIDTH - self.padding, 0, self.padding, SCREEN_HEIGHT)
         )
+        # 궁극기 텍스트 표시
+        text = font.render("Ultimate", True, BLACK)
+        screen.blit(text, (950, 600))
 
         for enemy in self.enemies:
             enemy.draw(screen)
@@ -33,8 +36,6 @@ class Stage:
             screen.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, 50))
 
         ######################### function 2 ###############################
-
-        if 
 
         ######################### function 2 ###############################
 
