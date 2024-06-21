@@ -62,7 +62,7 @@ def main():
             player.draw(screen, font)
 
         else: 
-            menu.draw(clock)
+            menu.draw()
 
         pygame.display.flip()
         clock.tick(FPS)

@@ -14,7 +14,7 @@ class Menu:
         self.frame = 0
         self.smallfont = pygame.font.SysFont("Arial", 20)
         self.largefont = pygame.font.SysFont("Arial", 60, True)
-    def draw(self, clock):
+    def draw(self):
         self.screen.fill(WHITE)
         for i, option in enumerate(self.options):
             if i == self.selected_option:

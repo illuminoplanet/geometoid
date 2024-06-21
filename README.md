@@ -1,4 +1,4 @@
-# Geometoid
+# Geometoid - 추가기능 구현 버전
 
 # 구현 목표
 
@@ -11,6 +11,13 @@
 * 3가지 종류의 적 및 기초 인공지능
 * 객체간의 충돌 처리
 * 스테이지 흐름 제어 기능  
+
+# 추가 구현 기능
+* 플레이어 객체의 데미지 효과
+* 게임 시작 메뉴와 재도전 기능
+* 마우스 우클릭 시 무적 모드 발동
+
+[![Watch Demo](https://raw.githubusercontent.com/ysan9500/geometoid/main/demo/phase2_demo_thumbnail.png)](https://raw.githubusercontent.com/ysan9500/geometoid/main/demo/phase2_demo.mp4)
 
 # Reference
 [1] https://github.com/pygame/pygame "pygame"
@@ -111,6 +118,15 @@ https://github.com/pygame/pygame 참조하여 설치 후 확인 필요
   1. 대기 리스트에서 적을 꺼내 스테이지에 소환.
   2. 적이 순차적으로 등장하도록 설정.
 
+- invincible(): 플레이어를 일정시간 무적으로 만드는 메서드. *추가구현
+  무적 시간이 남았을 경우: 
+    1. 플레이어가 받는 데미지를 무효화.
+    2. 플레이어와 충돌하는 적을 즉시 파괴.
+    3. 플레이어 sprite의 색깔을 무지개빛으로 바꿈.
+
+- damage_effect(): 플래이어가 데미지를 입을 때마다 붉은 화면으로 알림.
+  플레이어가 데미지를 입었을 시 일정 시간동안 화면을 붉게 채움.
+
 
 ## enemy.py
 ### 클래스 Enemy
@@ -126,4 +142,8 @@ https://github.com/pygame/pygame 참조하여 설치 후 확인 필요
 - update(): 적의 종류에 맞게 적의 상태를 업데이트하는 메서드.
 - draw(screen): 적의 종류에 맞게 적을 화면에 그리는 메서드.
 
-
+## menu.py *추가구현
+### 클래스 Menu
+설명: 게임 메뉴 클래스로, 게임 시작과 종료 시 재도전, 게임 종료의 옵션을 수행.
+- draw(): 메뉴 화면을 출력하는 메서드. start, quit의 두 가지 옵션을 제공.
+- handle_event(): 키보드 입력을 통해 start, quit의 옵션을 받아 수행.
