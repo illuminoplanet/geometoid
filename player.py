@@ -8,9 +8,10 @@ from config import STAGE_PADDING, BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Player:
     def __init__(self, x, y):
-        self.image = pygame.transform.scale(
-            pygame.image.load("assets/player.png"), (64, 64)
+        self.image_original = pygame.transform.scale(
+            pygame.image.load("assets/player.png").convert_alpha(), (64, 64)
         )
+        self.image = self.image_original.copy()
         self.proj_image = pygame.image.load("assets/proj_player.png")
 
         self.rect = self.image.get_rect(center=(x, y))
@@ -28,6 +29,8 @@ class Player:
         self.prev_fire = 0
         self.fire = False
         self.projectiles = []
+
+        self.alive = False
 
     def draw(self, screen, font):
         if self.health <= 0:
@@ -49,6 +52,7 @@ class Player:
 
     def update(self, mouse, keys):
         if self.health <= 0:
+            self.alive = False
             return
 
         accel = pygame.math.Vector2(0, 0)
@@ -99,3 +103,7 @@ class Player:
 
     def take_damage(self, damage):
         self.health -= damage
+
+    def damage_effect(surface, scale):
+        GB = min(255, max(0, round(255 * (1-scale))))
+        surface.fill((255, GB, GB), special_flags = pygame.BLEND_MULT)

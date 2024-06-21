@@ -4,6 +4,7 @@ import pygame
 from player import Player
 from stage import Stage
 from config import *
+from menu import Menu
 
 pygame.init()
 
@@ -19,35 +20,53 @@ clock = pygame.time.Clock()
 
 
 def main():
-    stage = Stage(STAGE_PADDING)
+    ########################## PHASE 2 #########################
     player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+    stage = Stage(STAGE_PADDING, screen, player)
+    ############################################################
+    
+    menu = Menu(screen)
 
-    running = True
-    while running:
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                player.fire = True
-            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                player.fire = False
-            if event.type == pygame.USEREVENT:
-                stage.plan_round()
+                pygame.quit()
+                sys.exit()
+            if player.alive == True:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    player.fire = True
+                if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                    player.fire = False
+                if event.type == pygame.USEREVENT:
+                    stage.plan_round()
+######################## PHASE 2 #############################
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                    stage.invincible_timer = 200
+            else:
+                action = menu.handle_event(event)
+                if action == "start_game":
+                    player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+                    stage = Stage(STAGE_PADDING, screen, player)
+                    player.alive = True
+##############################################################
+                
+        if player.alive == True:
+            mouse = pygame.mouse.get_pos()
+            keys = pygame.key.get_pressed()
 
-        mouse = pygame.mouse.get_pos()
-        keys = pygame.key.get_pressed()
-        player.update(mouse, keys)
-        stage.update(player)
+            screen.fill(WHITE)
 
-        screen.fill(WHITE)
-        stage.draw(screen, font)
-        player.draw(screen, font)
+            player.update(mouse, keys)
+            stage.update(player)
+            stage.draw(screen, font)
+            player.draw(screen, font)
+
+        else: 
+            menu.draw()
 
         pygame.display.flip()
         clock.tick(FPS)
 
-    pygame.quit()
-    sys.exit()
 
 
 if __name__ == "__main__":
